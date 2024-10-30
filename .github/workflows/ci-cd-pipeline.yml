@@ -52,3 +52,23 @@ jobs:
         docker build -t buraksefil17/restaurant-client:latest ./client
         echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USER }} --password-stdin
         docker push buraksefil17/restaurant-client:latest
+
+  deployment:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Deploy to Kubernetes
+      env:
+        KUBECONFIG: ${{ secrets.KUBECONFIG }}
+      run: |
+        kubectl apply -f backend-deployment.yml
+        kubectl apply -f client-deployment.yml
+        kubectl apply -f db-deployment.yml
+        kubectl apply -f backend-service.yml
+        kubectl apply -f client-service.yml
+        kubectl apply -f db-service.yml
+        kubectl apply -f parsistent-volume.yml
+        kubectl apply -f pvc.yml        
