@@ -54,7 +54,7 @@ jobs:
         docker push buraksefil17/restaurant-client:latest
 
   deployment:
-    
+
     runs-on: ubuntu-latest
 
     steps:
@@ -71,4 +71,22 @@ jobs:
         kubectl apply -f client-service.yml
         kubectl apply -f db-service.yml
         kubectl apply -f parsistent-volume.yml
-        kubectl apply -f pvc.yml        
+        kubectl apply -f pvc.yml
+  
+  deploy_to_eks:
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Update kubeconfig
+      run: aws eks --region ${{ secrets.AWS_REGION }} update-kubeconfig --name eksburak
+              
