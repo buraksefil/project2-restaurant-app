@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-deployment # Deployment Adi
+  labels:
+    app: db # Uygulama icin genel tanimlayici
+spec:
+  replicas: 1 # replika sayisi
+  selector:
+    matchLabels:
+      app: db # Matcher label; podlarin bu deployment a ait oldugunu göster
+  template:
+    metadata:
+      labels:
+        app: db # Pod etiketi
+    spec:
+      containers:
+      - name: db-container
+        image: postgres:13
+        ports:
+        - containerPort: 80
+        env:
+          - name: POSTGRES_USER
+            value: "your_user"
+          - name: POSTGRES_PASSWORD
+            value: "your_password"
+          - name: POSTGRES_DB
+            value: "flor_de_sal"    

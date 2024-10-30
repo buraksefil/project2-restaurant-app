@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment # Deployment Adi
+  labels:
+    app: backend # Uygulama icin genel tanimlayici
+spec:
+  replicas: 1 # replika sayisi
+  selector:
+    matchLabels:
+      app: backend # Matcher label; podlarin bu deployment a ait oldugunu göster
+  template:
+    metadata:
+      labels:
+        app: backend # Pod etiketi
+    spec:
+      containers:
+      - name: backend-container
+        image: buraksefil17/project2-restaurant-backend:latest
+        ports:
+        - containerPort: 80
+        env:
+          - name: SECRET
+            value: "MySecret1!"
+          - name: DATABASE_URL
+            value: "postgres://your_user:your_password@db-service:5432/flor_de_sal"
+          - name: CLOUD_NAME
+            value: "drsjloigq"    
+          - name: CLOUD_API_KEY
+            value: "926793658896175"    
+          - name: CLOUD_API_SECRET
+            value: "5QhoDhOiODpETRSYUrRYDzu5tv0"    
+          - name: PORT
+            value: "6001"   

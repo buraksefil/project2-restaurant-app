@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres-container
+    environment:
+      POSTGRES_USER: your_user
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: flor_de_sal
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - mynetwork
+
+  backend:
+    build: ./backend
+    container_name: api-container
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: "postgres://your_user:your_password@postgres:5432/flor_de_sal"
+      SECRET: MySecret1!
+      CLOUD_NAME: drsjloigq
+      CLOUD_API_KEY: 926793658896175
+      CLOUD_API_SECRET: 5QhoDhOiODpETRSYUrRYDzu5tv0
+      PORT: 6001
+    networks:
+      - mynetwork
+    ports:
+      - "6001:6001"
+
+  frontend:
+    build: ./client
+    container_name: frontend-container
+    environment:
+     VITE_SERVER_URL: "http://localhost:6001"
+    ports:
+      - "8080:80"
+    networks:
+      - mynetwork 
+
+volumes:
+  pgdata:
+
+networks:
+  mynetwork:
+
+
+

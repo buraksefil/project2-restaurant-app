@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-deployment # Deployment Adi
+  labels:
+    app: client # Uygulama icin genel tanimlayici
+spec:
+  replicas: 1 # replika sayisi
+  selector:
+    matchLabels:
+      app: client # Matcher label; podlarin bu deployment a ait oldugunu göster
+  template:
+    metadata:
+      labels:
+        app: client # Pod etiketi
+    spec:
+      containers:
+      - name: client-container
+        image: buraksefil17/restaurant-client:latest
+        ports:
+        - containerPort: 80
+        env:
+          - name: VITE_SERVER_URL
+            value: "http://a28f71a593ba648aa9a3f7e94ccd400c-189473300.us-east-1.elb.amazonaws.com:6001"
